@@ -1,4 +1,4 @@
-package com.birdushenin.mchsfire;
+package com.birdushenin.mchsfire.presentation;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,37 +20,36 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.birdushenin.mchsfire.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
-    EditText editTextItemName,editTextBrand;
+    EditText editTextItemName, editTextBrand;
     Button buttonAddItem;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_item);
 
-        editTextItemName = (EditText)findViewById(R.id.et_item_name);
-        editTextBrand = (EditText)findViewById(R.id.et_brand);
+        editTextItemName = (EditText) findViewById(R.id.et_item_name);
+        editTextBrand = (EditText) findViewById(R.id.et_brand);
 
-        buttonAddItem = (Button)findViewById(R.id.btn_add_item);
+        buttonAddItem = (Button) findViewById(R.id.btn_add_item);
         buttonAddItem.setOnClickListener(this);
 
 
     }
 
-    private void   addItemToSheet() {
+    private void addItemToSheet() {
 
-        final ProgressDialog loading = ProgressDialog.show(this,"Adding Item","Please wait");
+        final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
         final String name = editTextItemName.getText().toString().trim();
         final String brand = editTextBrand.getText().toString().trim();
-
-
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwPgiWEVXfzeV2PnzkvWw2YKL_e8MkyIoVIRGlIuUoz0hmjxiuh5CVgtGjyzIVeVHRC/exec",
                 new Response.Listener<String>() {
@@ -59,8 +57,8 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                     public void onResponse(String response) {
 
                         loading.dismiss();
-                        Toast.makeText(AddItem.this,response,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        Toast.makeText(AddItem.this, response, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
 
                     }
@@ -77,9 +75,9 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
                 Map<String, String> parmas = new HashMap<>();
 
                 //here we pass params
-                parmas.put("action","addItem");
-                parmas.put("itemName",name);
-                parmas.put("brand",brand);
+                parmas.put("action", "addItem");
+                parmas.put("itemName", name);
+                parmas.put("brand", brand);
 
                 return parmas;
             }
@@ -94,13 +92,12 @@ public class AddItem extends AppCompatActivity implements View.OnClickListener {
 
         queue.add(stringRequest);
 
-
     }
 
     @Override
     public void onClick(View v) {
 
-        if(v==buttonAddItem){
+        if (v == buttonAddItem) {
             addItemToSheet();
         }
     }
