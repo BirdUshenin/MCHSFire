@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.birdushenin.mchsfire.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AddItemFragment extends Fragment implements View.OnClickListener {
@@ -50,6 +54,12 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
         buttonAddItem = view.findViewById(R.id.btn_add_item);
         buttonAddItem.setOnClickListener(this);
+
+        view.findViewById(R.id.btn_add_item).setOnClickListener(this);
+        TextView dateTextView = view.findViewById(R.id.dateTextView);
+
+        String currentDate = getCurrentDate();
+        dateTextView.setText(currentDate);
     }
 
     private void addItemToSheet() {
@@ -105,5 +115,10 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
             addItemToSheet();
 
         }
+    }
+    private String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
     }
 }
