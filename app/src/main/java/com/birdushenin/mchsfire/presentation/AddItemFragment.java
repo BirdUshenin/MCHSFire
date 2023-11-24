@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +37,10 @@ import java.util.Map;
 
 public class AddItemFragment extends Fragment implements View.OnClickListener {
 
-    private EditText editTextItemName, editTextBrand;
+    private EditText editTextItemName, editTextBrand, editAddress;
     private Button buttonAddItem;
+    private String selectedCity;
+    private String selectedCity2;
 
     public AddItemFragment() {
     }
@@ -51,6 +56,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
         editTextItemName = view.findViewById(R.id.et_item_name);
         editTextBrand = view.findViewById(R.id.et_brand);
+        editAddress = view.findViewById(R.id.address);
 
         buttonAddItem = view.findViewById(R.id.btn_add_item);
         buttonAddItem.setOnClickListener(this);
@@ -60,6 +66,44 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
         String currentDate = getCurrentDate();
         dateTextView.setText(currentDate);
+
+        Spinner spinnerCities = view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCities.setAdapter(adapter);
+
+//        Spinner spinnerCities2 = view.findViewById(R.id.spinner2);
+//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
+//                R.array.options, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerCities.setAdapter(adapter2);
+
+        // Обработчик выбора элемента в Spinner
+        spinnerCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+               selectedCity = parentView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Выбрано ничего (можно оставить пустым или добавить действия)
+            }
+        });
+
+//        spinnerCities2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                selectedCity2 = parentView.getItemAtPosition(position).toString();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//                // Выбрано ничего (можно оставить пустым или добавить действия)
+//            }
+//        });
+
     }
 
     private void addItemToSheet() {
@@ -67,8 +111,9 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
         final String name = editTextItemName.getText().toString().trim();
         final String brand = editTextBrand.getText().toString().trim();
+        final String address = editAddress.getText().toString().trim();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwPgiWEVXfzeV2PnzkvWw2YKL_e8MkyIoVIRGlIuUoz0hmjxiuh5CVgtGjyzIVeVHRC/exec",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwjGrzGZAoaF7efObg0rB1LM50wMl6rJxu1X8X2hSFxb6imMBBBs8SPYctpIGxC1E60/exec",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -95,6 +140,9 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
                 params.put("action", "addItem");
                 params.put("itemName", name);
                 params.put("brand", brand);
+                params.put("address", address);
+                params.put("city", selectedCity);
+                params.put("city2", selectedCity2);
 
                 return params;
             }
