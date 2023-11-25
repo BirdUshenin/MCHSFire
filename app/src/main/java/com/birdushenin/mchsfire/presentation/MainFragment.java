@@ -8,8 +8,13 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.birdushenin.mchsfire.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -18,6 +23,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.findViewById(R.id.btn_add_item).setOnClickListener(this);
+
         return view;
     }
 
@@ -27,4 +33,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_addItemFragment);
         }
     }
+
+
 }
